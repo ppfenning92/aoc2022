@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 tqdm = "*"
+requests = "*"
+advent-of-code-data = "*"
 
 [dev-packages]
 

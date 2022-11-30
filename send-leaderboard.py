@@ -13,22 +13,19 @@ members_list = [{"name": m["name"], "score": m["local_score"]} for m in members_
 members_list.sort(key=operator.itemgetter('score'))
 
 date = datetime.today().strftime("%d.%m.%Y")
-header = f"ottonova AOC 2022 - {date}"
-standings = "\n".join([f"Score: \t{m['score']}\t\t- {m['name']}" for m in members_list])
-text = f"""
-{header}
-
-{standings}
-"""
-
+header = f"**ottonova AOC 2022** [Leaderboard](https://adventofcode.com/2022/leaderboard/private/view/1899089) - {date}"
+standings = "\n".join([f"Score: **{m['score']}**\t\t***{m['name']}***" for m in members_list])
 
 mattermost_header = {"Content-Type": "application/json"}
 mattermost_request = {
-    "channel": "adventofcode",
+    "channel": "pp-test",
     "username": "AOC 2022 - ottonova",
     "attachments": [{
+        "color": "#99ff99",
+        "text": header
+    },{
         "color": "#ff00ee",
-        "text": text
+        "text": standings
     }]
 }
 mattermost_url = os.environ['MATTERMOST_WEBHOOK_URL']

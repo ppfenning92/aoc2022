@@ -18,7 +18,7 @@ standings = "\n".join([f"Score: **{m['score']}**\t\t***{m['name']}***" for m in 
 
 mattermost_header = {"Content-Type": "application/json"}
 mattermost_request = {
-    "channel": "pp-test",
+    "channel": "adventofcode",
     "username": "AOC 2022 - ottonova",
     "attachments": [{
         "color": "#99ff99",

@@ -48,5 +48,6 @@ totals = [sum(e) for e in data.values()]
 
 print(totals, len(totals), max(totals))
 
+# part 2
 totals.sort(reverse=True)
 print(sum(totals[0:3]))

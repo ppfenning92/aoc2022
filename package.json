@@ -1,0 +1,31 @@
+{
+  "name": "aoc2022",
+  "version": "1.0.0",
+  "description": "Advent of code - 2022",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --watch 'src/**' --ext 'ts,json' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/$(date '+%d')/index.ts",
+    "s": "yarn start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ppfenning92/aoc2022.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ppfenning92/aoc2022/issues"
+  },
+  "homepage": "https://github.com/ppfenning92/aoc2022#readme",
+  "dependencies": {
+    "mathjs": "^11.4.0",
+    "ts-node": "^10.9.1"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.10",
+    "nodemon": "^2.0.20",
+    "typescript": "^5.0.0-dev.20221201"
+  }
+}

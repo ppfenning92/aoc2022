@@ -31,12 +31,22 @@ from utils import Point, DIRS, DIRS_4, DIRS_8  # NOQA
 total = 0
 result = []
 table = new_table(None, width=2, height=4)
-data=[]
+data={}
+
+elf = 0
+data.setdefault(f"{elf}", [])
 with fileinput.input(files=(f"input.txt",), encoding="utf-8") as f:
     for i, line in enumerate(f):
         line = line.strip()
         if line:
-            # data.append(int(line))
-            data.append({"line": i, "value": int(line)})
+            data[f"{elf}"].append(int(line))
+        else:
+            elf += 1
+            data.setdefault(f"{elf}", [])
 
-    print(data)
+totals = [sum(e) for e in data.values()]
+
+print(totals, len(totals), max(totals))
+
+totals.sort(reverse=True)
+print(sum(totals[0:3]))

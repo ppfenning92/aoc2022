@@ -9,12 +9,12 @@ r = requests.get('https://adventofcode.com/2022/leaderboard/private/view/1899089
 
 leaderboard = json.loads(r.content)
 members_dict = dict(leaderboard['members'])
-members_list = [{"name": m["name"], "score": m["local_score"]} for m in members_dict.values()]
-members_list.sort(key=operator.itemgetter('score'))
+members_list = [{"name": m["name"], "score": m["local_score"], "stars": m["stars"]} for m in members_dict.values()]
+members_list.sort(key=operator.itemgetter('score'), reverse=True)
 
 date = datetime.today().strftime("%d.%m.%Y")
 header = f"**ottonova AOC 2022** [Leaderboard](https://adventofcode.com/2022/leaderboard/private/view/1899089) - {date}"
-standings = "\n".join([f"Score: **{m['score']}**\t\t***{m['name']}***" for m in members_list])
+standings = "\n".join([f":star2:\t**{m['stars']: 3}** \t***{m['name']}***" for m in members_list])
 
 mattermost_header = {"Content-Type": "application/json"}
 mattermost_request = {

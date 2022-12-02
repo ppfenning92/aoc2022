@@ -32,11 +32,68 @@ total = 0
 result = []
 table = new_table(None, width=2, height=4)
 data=[]
+
+map = {
+    "AX": 1+3,
+    "AY": 2+6,
+    "AZ": 3+0,
+    "BX": 1+0,
+    "BY": 2+3,
+    "BZ": 3+6,
+    "CX": 1+6,
+    "CY": 2+0,
+    "CZ": 3+3,
+}
+
+print (map)
 with fileinput.input(files=(f"input.txt",), encoding="utf-8") as f:
     for i, line in enumerate(f):
         line = line.strip()
         if line:
             # data.append(int(line))
-            data.append({"line": i, "value": int(line)})
+            data.append({"line": i, "value": line.split()})
 
-    print(data)
+sum=0
+for match in data:
+    sum += map["".join(match['value'])]
+
+print('sum', sum)
+
+
+
+
+mod_sum = 0
+for match in data:
+    elf = match['value'][0]
+    target = match['value'][1]
+
+    # lose
+    if target == "X":
+        if elf == "A":
+            mod_sum += 3
+        if elf == "B":
+            mod_sum += 1
+        if elf == "C":
+            mod_sum += 2
+
+    # draw
+    if target == "Y":
+        mod_sum += 3
+        if elf == "A":
+            mod_sum += 1
+        if elf == "B":
+            mod_sum += 2
+        if elf == "C":
+            mod_sum += 3
+    # win
+    if target == "Z":
+        mod_sum += 6
+        if elf == "A":
+            mod_sum += 2
+        if elf == "B":
+            mod_sum += 3
+        if elf == "C":
+            mod_sum += 1
+
+
+print('part2 ', mod_sum)

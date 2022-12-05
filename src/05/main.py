@@ -31,12 +31,87 @@ from utils import Point, DIRS, DIRS_4, DIRS_8  # NOQA
 total = 0
 result = []
 table = new_table(None, width=2, height=4)
-data=[]
-with fileinput.input(files=(f"input.txt",), encoding="utf-8") as f:
-    for i, line in enumerate(f):
-        line = line.strip()
-        if line:
-            # data.append(int(line))
-            data.append({"line": i, "value": int(line)})
 
-    print(data)
+
+stacks=[]
+data=[]
+test = """    [D]    
+[N] [C]    
+[Z] [M] [P]
+ 1   2   3 
+
+move 1 from 2 to 1
+move 3 from 1 to 3
+move 2 from 2 to 1
+move 1 from 1 to 2"""
+with fileinput.input(files=(f"input.txt",), encoding="utf-8") as f:
+    stack = True
+    for i, line in enumerate(f):
+    # for i, line in enumerate(test.split('\n')):
+        line = line.strip('\n')
+        if line == '':
+            stack = False
+            continue
+        if not stack:
+            l = parse_nums(line)
+            Move = namedtuple('Move', ['m', 'f', 't'] )
+            data.append(Move(m=l[0], f=l[1], t=l[2]))
+            continue
+        if stack:
+            line = re.sub(r'[\[\]]', '', line)
+            line = re.sub(r'\s{4}', ' ', line)
+            line = line.split(' ')
+            print(line)
+            stacks.insert(0, [x  if x != '' else None for x in line])
+
+    stacks = stacks[1:][::-1]
+def stack_print():
+    for stack in stacks:
+        print(stack)
+
+stacks = rotated(stacks)
+stack_print()
+
+for stack in range(len(stacks)):
+    stacks[stack] = [x for x in stacks[stack] if x]
+# PART 1
+# for move, inst in enumerate(data):
+#     _move, _from, _to = inst
+#     print(f"\nmove {_move} from {_from} to {_to}")
+#     stack_print()
+#     for m in range(_move):
+#         stack = stacks[_from-1]
+#         crate = stack.pop()
+#         stacks[_to-1].append(crate)
+#
+#     print('step', move)
+#     stack_print()
+#
+# skyline = []
+#
+# for stack in stacks:
+#     skyline.append(stack.pop())
+#
+# print("".join(skyline))
+
+
+
+for move, inst in enumerate(data):
+    _move, _from, _to = inst
+    print(f"\nmove {_move} from {_from} to {_to}")
+    stack_print()
+    crates = []
+    for m in range(_move):
+        crates.append(stacks[_from-1].pop())
+
+    stacks[_to-1] += crates[::-1]
+
+    print('step', move)
+    stack_print()
+
+skyline = []
+
+for stack in stacks:
+    skyline.append(stack.pop())
+
+print("".join(skyline))

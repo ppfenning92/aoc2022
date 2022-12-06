@@ -21,22 +21,40 @@ from utils import md5, sha256, knot_hash  # NOQA
 from utils import VOWELS, CONSONANTS  # NOQA
 from utils import Point, DIRS, DIRS_4, DIRS_8  # NOQA
 
-# Itertools Functions:
-# product('ABCD', repeat=2)                   AA AB AC AD BA BB BC BD CA CB CC CD DA DB DC DD
-# permutations('ABCD', 2)                     AB AC AD BA BC BD CA CB CD DA DB DC
-# combinations('ABCD', 2)                     AB AC AD BC BD CD
-# combinations_with_replacement('ABCD', 2)    AA AB AC AD BB BC BD CC CD DD
-
-
-total = 0
-result = []
 table = new_table(None, width=2, height=4)
-data=[]
+tests = {
+    "mjqjpqmgbljsphdztnvjfqwrcgsmlb": 19,
+    "bvwbjplbgvbhsrlpgdmjqwftvncz": 23,
+    "nppdvjthqldpwncqszvftbrmjlhg": 23,
+    "nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg": 29,
+    "zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw":  26,
+}
+data = None
 with fileinput.input(files=(f"input.txt",), encoding="utf-8") as f:
-    for i, line in enumerate(f):
-        line = line.strip()
-        if line:
-            # data.append(int(line))
-            data.append({"line": i, "value": int(line)})
+    data = f.readline().strip()
 
-    print(data)
+
+WINDOW_SIZE = 14
+def find_marker(string: str):
+    chars = list(string)
+    seen = set()
+    window = []
+    for i, char in enumerate(chars):
+
+        if len(window) == WINDOW_SIZE:
+            window = window[1:] + [char]
+        else:
+            window.append(char)
+
+        if len(set(window)) == WINDOW_SIZE:
+            return i+1
+
+
+    return -1
+
+
+for msg, expected in tests.items():
+    print(find_marker(msg), expected)
+
+print(find_marker(data))
+

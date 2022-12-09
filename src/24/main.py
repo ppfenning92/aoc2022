@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from __future__ import annotations
+
 import os  # NOQA
 import sys  # NOQA
 
@@ -21,22 +23,17 @@ from utils import md5, sha256, knot_hash  # NOQA
 from utils import VOWELS, CONSONANTS  # NOQA
 from utils import Point, DIRS, DIRS_4, DIRS_8  # NOQA
 
-# Itertools Functions:
-# product('ABCD', repeat=2)                   AA AB AC AD BA BB BC BD CA CB CC CD DA DB DC DD
-# permutations('ABCD', 2)                     AB AC AD BA BC BD CA CB CD DA DB DC
-# combinations('ABCD', 2)                     AB AC AD BC BD CD
-# combinations_with_replacement('ABCD', 2)    AA AB AC AD BB BC BD CC CD DD
-
+import numpy as np
 
 total = 0
-result = []
 table = new_table(None, width=2, height=4)
 data=[]
+test = """TEST"""
 with fileinput.input(files=(f"input.txt",), encoding="utf-8") as f:
-    for i, line in enumerate(f):
+    for i, line in enumerate(test.split('\n')):
+    # for i, line in enumerate(f):
         line = line.strip()
         if line:
-            # data.append(int(line))
-            data.append({"line": i, "value": int(line)})
+            data.append(line)
 
-    print(data)
+print(data)

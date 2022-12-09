@@ -71,22 +71,17 @@ with fileinput.input(files=(f"input.txt",), encoding="utf-8") as f:
 print(data)
 HEAD = Knot('head')
 curr = HEAD
+
 for p in range(8):
+    # Part 2
     k = Knot(f"{p + 1}")
     curr.prev = k
     k.next = curr
-    # print(curr.next, curr, curr.prev)
     curr = k
 
 TAIL = Knot('tail')
 curr.prev = TAIL
 TAIL.next = curr
-# print(curr.next, curr, curr.prev)
-
-curr = HEAD
-while curr:
-    # print(curr)
-    curr = curr.next
 
 START = np.array([0, 0])
 
@@ -106,13 +101,6 @@ def move(knot: Knot, d: Literal['U'] | Literal['R'] | Literal['D'] | Literal['L'
 
     curr_part: Knot = knot.prev
     while curr_part:
-        # if np.linalg.norm(curr_part.pos - curr_part.next.pos) > (2 ** .5):
-        #     curr_part.last_pos = curr_part.pos.copy()
-        #     curr_part.pos = curr_part.next.last_pos.copy()
-        #     if curr_part == TAIL:
-        #         tail_pos.add(tuple(TAIL.pos))
-        #
-        # curr_part = curr_part.prev
         if np.linalg.norm(curr_part.pos - curr_part.next.pos) > (2 ** .5):
             if curr_part.pos[0] == curr_part.next.pos[0] and curr_part.pos[1] < curr_part.next.pos[1]:
                 curr_part.pos += np.array([0,1])
@@ -139,14 +127,5 @@ def move(knot: Knot, d: Literal['U'] | Literal['R'] | Literal['D'] | Literal['L'
 for dir, steps in data:
     for s in range(int(steps)):
         move(HEAD, dir)
-#
-# move(HEAD, 'U')
-# print(HEAD, TAIL)
-#
-#
-# move(HEAD, 'U')
-# print(HEAD, TAIL)
-#
-
 print(tail_pos)
 print(len(tail_pos))

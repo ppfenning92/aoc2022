@@ -57,6 +57,7 @@ def all_unique(lst):
 
 def factors(n):
     """Returns the factors of n."""
+    print(n)
     return sorted(
         x for tup in (
             [i, n // i] for i in range(1, int(n ** 0.5) + 1)

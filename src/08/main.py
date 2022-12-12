@@ -142,3 +142,22 @@ for i in range(1,WIDTH-1):
 # print(vis)
 print(best)
 print(max(best))
+
+
+
+"""
+3 0 3 7 3
+2 5 5 1 2
+6 5 3 3 2
+3 3 5 4 9
+3 5 3 9 0
+"""
+
+
+"""
+      7   
+      1   
+6 5 3 3 2
+      4  
+      9  
+"""

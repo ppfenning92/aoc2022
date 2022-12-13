@@ -62,7 +62,6 @@ with fileinput.input(files=(f"input.txt",), encoding="utf-8") as f:
             pair += 1
             data[pair] = ()
 
-print(data)
 
 
 def in_order(l: [int] | int, r: [int] | int):
@@ -87,7 +86,6 @@ def in_order(l: [int] | int, r: [int] | int):
 pairs_in_order = []
 for _id, _pair in data.items():
     left, right = _pair
-    print(_id,'# '*10)
     if in_order(left, right):
         pairs_in_order.append(_id)
 
@@ -125,4 +123,4 @@ for idx, el in enumerate(data_2):
     if el == DIV_2:
         idx_2 = idx +1
 
-print(idx_1, idx_2, idx_1*idx_2)
+print('part 2', idx_1*idx_2)

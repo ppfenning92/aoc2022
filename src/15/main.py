@@ -59,45 +59,16 @@ with fileinput.input(files=(f"input.txt",), encoding="utf-8") as f:
 
 from scipy.spatial.distance import cityblock as manhatten_distance
 
-# print(manhatten_distance((2,10), (8,7))) -> 9
-# print(manhatten_distance((-1,7), (8,7))) -> 9
-# def all_coords_within_distance(from_coord: Coord, d: int):
-#     min_x = from_coord.x - d
-#     max_x = from_coord.x + d
-#     min_y = from_coord.y - d
-#     max_y = from_coord.y + d
-#     print((min_x, max_x), (min_y, max_y), d)
-#     for x in range(min_x, max_x +1):
-#         for y in range(min_y, max_y +1):
-#             if Coord(x,y,'S') not in m and Coord(x,y,'B') not in m and Coord(x,y,'#') not in m:
-#                 if manhatten_distance((from_coord.x,from_coord.y), (x,y)) <= d:
-#                     m.add(Coord(x,y,'#'))
-#
-#
-# for s, b in data.items():
-#     all_coords_within_distance(s, manhatten_distance((s.x, s.y), (b.x, b.y)))
-
-CHECK_ROW = 2_000_000
-# CHECK_ROW = 10
+"""
 row = set()
-# for c in m:
-#     if c.y == CHECK_ROW and c.type == '#':
-#         row.add(c)
+CHECK_ROW = 10
+MIN_X =-25
+MAX_X = 25
+# CHECK_ROW = 2_000_000
+# MIN_X =-2_000_000
+# MAX_X = 5_000_000
 
-
-MIN_X = math.inf
-MAX_X = 0
-
-for s,b in data.items():
-    if s.y == CHECK_ROW or b.y == CHECK_ROW:
-        x = min(s.x,b.x)
-        MIN_X = x if x < MIN_X else MIN_X
-        x = max(s.x, b.x)
-        MAX_X = x if x > MAX_X else MAX_X
-
-
-print(MIN_X, MAX_X)
-for x in tqdm(range(-2_000_000, 5_000_000)):
+for x in tqdm(range(MIN_X, MAX_X)):
     candidate = (x,CHECK_ROW)
     for s,b in data.items():
         dist = manhatten_distance((s.x,s.y), (b.x,b.y))
@@ -111,15 +82,65 @@ row = list(row)
 row.sort()
 
 print(len(row))
-
-# MULTIPLIER = 20
-MULTIPLIER = 4_000_000
+"""
 
 MIN_XY = 0
-MAX_XY = 20
-# MAX_XY = 4_000_000
-def get_freq(_x,_y):
-    return _x * MULTIPLIER + _y
+# MAX_XY = 20
+MAX_XY = 4_000_000
+
+# print(manhatten_distance((2,10), (8,7))) -> 9
+# print(manhatten_distance((-1,7), (8,7))) -> 9
 
 
+bounds = []
+
+
+
+for s,b in data.items():
+    d = manhatten_distance((s.x, s.y), (b.x, b.y))
+    min_x = s.x - d
+    max_x = s.x + d
+    min_y = s.y - d
+    max_y = s.y + d
+    print((min_x, max_x), (min_y, max_y), d)
+    bounds.append([
+        (min_x, min_y),
+        (min_x, max_y),
+        (max_x, min_y),
+        (max_x, max_y),
+    ])
+
+
+print(len(bounds))
+print(bounds)
+
+"""
+               1    1    2    2
+     0    5    0    5    0    5
+-2 ..........#.................
+-1 .........###................
+ 0 ....S...#####...............
+ 1 .......#######........S.....
+ 2 ......#########S............
+ 3 .....###########SB..........
+ 4 ....#############...........
+ 5 ...###############..........
+ 6 ..#################.........
+ 7 .#########S#######S#........
+ 8 ..#################.........
+ 9 ...###############..........
+10 ....B############...........
+11 ..S..###########............
+12 ......#########.............
+13 .......#######..............
+14 ........#####.S.......S.....
+15 B........###................
+16 ..........#SB...............
+17 ................S..........B
+18 ....S.......................
+19 ............................
+20 ............S......S........
+21 ............................
+22 .......................B....
+"""
 

@@ -8,6 +8,7 @@ tqdm = "*"
 requests = "*"
 advent-of-code-data = "*"
 numpy = "*"
+scipy = "*"
 
 [dev-packages]
 

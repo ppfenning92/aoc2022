@@ -85,36 +85,97 @@ print(len(row))
 """
 
 MIN_XY = 0
-# MAX_XY = 20
-MAX_XY = 4_000_000
+MAX_XY = 20
+# MAX_XY = 4_000_000
 
 # print(manhatten_distance((2,10), (8,7))) -> 9
 # print(manhatten_distance((-1,7), (8,7))) -> 9
 
 
-bounds = []
+def square_spacing(s1, d1, s2, d2):
+    return abs(s1[0] - s2[0]) - (d1 + d2) + abs(s1[1] - s2[1])
 
+def overlapping_squares(s1, d1, s2, d2) -> bool:
+    return square_spacing(s1, d1, s2, d2) <= 0
 
+def line_from_adjacent_squares(s1, d1, s2, d2):
+    p1 = s1[0], s1[1]+d1+1
+    p2 = s2[0], s2[1]-d2-1
+    p3 = s1[0], s1[1]-d1-1
+    p4 = s2[0], s2[1]+d2+1
+    l1 = line_from_points(p1, p2)
+    l2 = line_from_points(p3, p4)
+    if abs(l1[0]) == 1.0:
+        return l1
+    else:
+        return l2
 
-for s,b in data.items():
-    d = manhatten_distance((s.x, s.y), (b.x, b.y))
-    min_x = s.x - d
-    max_x = s.x + d
-    min_y = s.y - d
-    max_y = s.y + d
-    print((min_x, max_x), (min_y, max_y), d)
-    bounds.append([
-        (min_x, min_y),
-        (min_x, max_y),
-        (max_x, min_y),
-        (max_x, max_y),
-    ])
+def line_from_points(p1, p2):
+    A = np.array([[p1[0], 1],
+                  [p2[0], 1]])
+    b = np.array([p1[1], p2[1]])
+    return np.rint(np.linalg.solve(A, b)).astype(int)
 
+def line(x, m, c):
+    return m*x + c
 
-print(len(bounds))
-print(bounds)
+def solve_crossing_lines(l1, l2):
+    A = np.array([[-l1[0], 1],
+                  [-l2[0], 1]])
+    b = np.array([l1[1], l2[1]])
+    return np.rint(np.linalg.solve(A, b)).astype(int)
 
+def solve_part_2() -> int:
+    pairings = ((0,1,2,3),
+                (0,2,1,3),
+                (0,3,1,2))
+    signal_distance_pairs = []
+    for s, b in data.items():
+        signal_distance_pairs.append(((s.x,s.y), manhatten_distance((s.x,s.y), (b.x,b.y))))
+
+    for four_squares in combinations(signal_distance_pairs, 4):
+        for p in pairings:
+            i, j, k, l = [four_squares[n] for n in p]
+            sep = []
+            possible = False
+            sep.append(square_spacing(*i, *j))
+            sep.append(square_spacing(*k, *l))
+            if sep == [2,2]:
+                overlaps = []
+                overlaps.append(overlapping_squares(*i, *k))
+                overlaps.append(overlapping_squares(*i, *l))
+                overlaps.append(overlapping_squares(*j, *k))
+                overlaps.append(overlapping_squares(*j, *l))
+                if np.all(overlaps):
+                    l1 = line_from_adjacent_squares(*i, *j)
+                    l2 = line_from_adjacent_squares(*k, *l)
+        else:
+            continue
+    x, y = solve_crossing_lines(l1, l2)
+    solution = 4000000*x + y
+    return solution
+
+print(solve_part_2())
 """
+# combinations('ABCD', 2)                     AB AC AD BC BD CD
+
+Each sensor + beacon pair defines a square of points that cannot contain the distress beacon.,
+
+Assume that we are looking for a single point that is bounded by four squares.
+
+This means that we want to find a set of four squares where:
+
+We have two pairs of squares with a separation of 2.
+
+All other combinations of squares have a separation of 0 or overlap (separation is negative).
+
+Loop over all combinations of 4 squares, until we find a set of 4 squares that fit the criteria above.
+
+Generate a pair of lines that run between each pair of squares.
+
+Compute the point where these cross.
+
+
                1    1    2    2
      0    5    0    5    0    5
 -2 ..........#.................
